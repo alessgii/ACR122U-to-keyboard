@@ -66,14 +66,20 @@ sudo python3 nfc_linux.py
 
 ## 2. Windows
 
-En Windows el proceso es más sencillo porque no hay módulos nativos que interfieran con el lector, y la inyección de teclas se puede hacer directamente con `pyautogui`.
+En Windows el proceso es más sencillo porque no hay módulos nativos que interfieran con el lector, y la inyección de teclas se hace directamente con la librería `pynput`.
 
 ### Requisitos previos
 
-Asegúrate de tener Python instalado y ejecuta en tu CMD o PowerShell:
+Asegúrate de tener Python instalado y ejecuta en tu CMD o PowerShell los comandos para descargar las dependencias. Puedes usar cualquiera de las siguientes opciones dependiendo de cómo esté configurado tu entorno:
 
+**Opción 1: Usando pip directamente**
 ```powershell
-pip install pyscard pyautogui
+pip install pyscard pynput
+```
+
+**Opción 2: Usando el ejecutable de Python (útil si la opción 1 falla)**
+```powershell
+py -m pip install pyscard pynput
 ```
 
 ### Uso
@@ -84,8 +90,9 @@ Entra a la carpeta de Windows y ejecuta el script normalmente:
 cd windows
 python nfc_windows.py
 ```
+*(Nota: Si PowerShell te da problemas al usar el comando `python`, puedes intentar ejecutarlo usando `py nfc_windows.py`)*
 
 ---
 
 ### Notas adicionales
-Ambos scripts incluyen un retraso automático de 2 segundos después de leer una tarjeta. Esto evita que, si dejas la credencial pegada al lector, el UID se escriba decenas de veces seguidas. Además, ambos scripts envían un "Enter" automático al terminar de inyectar el UID para agilizar el uso en sistemas web o bases de datos.
+Ambos scripts incluyen un retraso automático después de leer una tarjeta. Esto evita que, si dejas la credencial pegada al lector, el UID se escriba decenas de veces seguidas. Además, ambos scripts envían un "Enter" automático al terminar de inyectar el UID para agilizar el uso en sistemas web o bases de datos.
