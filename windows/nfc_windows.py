@@ -2,18 +2,31 @@ import time
 from smartcard.System import readers
 from smartcard.util import toHexString
 from smartcard.Exceptions import NoCardException
-import pyautogui
+from pynput.keyboard import Controller, Key
 
-def leer_nfc_windows():
+def type_string(teclado, text):
+    teclado.type(text)
+    teclado.press(Key.enter)
+    teclado.release(Key.enter)
+
+def leer_nfc():
     r = readers()
     if not r:
         print("No se detectó ningún lector.")
         return
 
     lector = r[0]
-    print(f"✅ Lector detectado: {lector}")
+    print(f"Lector detectado: {lector}")
+    
+    try:
+        teclado = Controller()
+        print("Controlador de teclado virtual inicializado con éxito.")
+    except Exception as err:
+        print(f"Error al iniciar el teclado virtual: {err}")
+        return
+    
     conexion = lector.createConnection()
-    print("Listo. Acerca la credencial...")
+    print("Puedes comenzar a escanear...")
 
     while True:
         try:
@@ -23,16 +36,15 @@ def leer_nfc_windows():
             
             if sw1 == 144 and sw2 == 0:
                 uid = toHexString(data).replace(" ", "")
-                print(f"UID leído: {uid} -> Inyectando en Windows...")
+                print(f"UID leído: {uid} -> Inyectando teclas...")
                 
-                pyautogui.write(uid)
-                pyautogui.press('enter')
+                type_string(teclado, uid)
                 
-                time.sleep(2)
+                time.sleep(3)
         except NoCardException:
             time.sleep(0.5)
         except Exception:
             time.sleep(0.5)
 
 if __name__ == '__main__':
-    leer_nfc_windows()
+    leer_nfc()
